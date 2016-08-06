@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.0)
+if(POLICY CMP0020)
+	cmake_policy(SET CMP0020 NEW)
+endif()
+project(itkvtkdicomqt)
+find_package(VTK REQUIRED)
+find_package(ITK REQUIRED)
+include(${VTK_USE_FILE})
+include( ${ITK_USE_FILE})
+
+set(CMAKE_AUTOMOC on)
+FIND_PACKAGE(Qt5widgets REQUIRED QUIET)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+
+file(GLOB UI_FILES *.ui)
+file(GLOB QT_WRAP *.h)
+file(GLOB SRCS_FILES *.cxx)
+
+qt5_wrap_ui(UISrcs ${UI_FILES})
+add_executable(car WIN32 ${SRCS_FILES} ${UISrcs} ${QT_WRAP})
+qt5_use_modules(car Core Gui)
+target_link_libraries(car ${VTK_LIBRARIES} ${Glue} ${ITK_LIBRARIES})
