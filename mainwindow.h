@@ -3,8 +3,8 @@
 
 //qt includes
 #include <QMainWindow>
-#include <QVTKWidget.h>
-#include <QVTKApplication.h>
+#include <QFileDialog>
+#include <QString>
 
 // some standard vtk headers
 #include <vtkSmartPointer.h>
@@ -46,7 +46,7 @@ public:
 private:
 	Ui::MainWindow *ui;
 
-private slots:
+	private slots:
 	void on_openBt1_clicked();
 };
 
@@ -54,4 +54,36 @@ class StatusMessage{
 public:
 	static std::string Format(int, int);
 };
+
+class myVtkInteractorStyleImage : public vtkInteractorStyleImage
+{
+public:
+	static myVtkInteractorStyleImage* New();
+	vtkTypeMacro(myVtkInteractorStyleImage, vtkInteractorStyleImage);
+
+protected:
+	vtkImageViewer2* _ImageViewer;
+	vtkTextMapper* _StatusMapper;
+	int _Slice;
+	int _MinSlice;
+	int _MaxSlice;
+
+public:
+	void SetImageViewer(vtkImageViewer2* imageViewer);
+
+	void SetStatusMapper(vtkTextMapper* statusMapper);
+
+
+protected:
+	void MoveSliceForward();
+
+	void MoveSliceBackward();
+	virtual void OnKeyDown();
+
+
+	virtual void OnMouseWheelForward();
+	virtual void OnMouseWheelBackward();
+};
+
+
 #endif // MAINWINDOW_H
